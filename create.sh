@@ -29,5 +29,7 @@ sudo ip link set veth0 up
 # Create proc directory and mount proc filesystem
 sudo mkdir -p /mnt/mycontainer/proc
 
-# Use unshare to create a new mount namespace and mount proc filesystem
-sudo unshare --mount --pid --fork --net --uts --mount-proc=/mnt/mycontainer/proc chroot /mnt/mycontainer /bin/ash
+# Run the unshare command within the network namespace.
+sudo ip netns exec mycontainer_ns \
+    unshare --mount --pid --fork --uts --mount-proc=/mnt/mycontainer/proc \
+    chroot /mnt/mycontainer /bin/ash
