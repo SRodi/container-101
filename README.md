@@ -13,37 +13,15 @@ The create.sh script is designed to set up an isolated environment using Alpine 
 4. Creates a /proc directory inside the container's filesystem.
 5. Run unshare within the network namespace to create a new mount namespace, a new PID namespace, and mounts the proc filesystem, then chroots into the container's filesystem and starts a shell.
 
+![Demo](demo.gif)
+
+
 This script essentially sets up a basic containerized environment with network isolation and a separate process namespace.
 
-## Create a VM (optional)
-
-If you do not have a Linux VM you can use Vagrant.
-
-Create file called `Vagrantfile`
-```vagrant
-Vagrant.configure("2") do |config|
-    config.vm.box = "bento/ubuntu-24.04"
-    config.vm.box_version = "202404.26.0"
-    config.vm.synced_folder ".", "/vagrant_data"
-end
-```
-
-Create VM
-```sh
-vagrant up
-```
-
-Sync scripts
-```sh
-vagrant ssh -c "sudo cp -r /vagrant_data/* /home/vagrant"
-```
-
-ssh into VM
-```sh
-vagrant ssh
-```
-
 ## Prerequisites
+
+1. Linux machine
+2. cgroup-tools and debootstrap
 
 Install the following
 
@@ -62,4 +40,36 @@ To create the container
 To delete the container
 ```sh
 ./delete.sh
+```
+
+## Create a VM (optional)
+
+If you do not have a Linux VM you can use Vagrant.
+
+Create file called `Vagrantfile`
+```vagrant
+Vagrant.configure("2") do |config|
+  config.vm.box = "bento/ubuntu-24.04"
+  config.vm.box_version = "202404.26.0"
+  config.vm.synced_folder ".", "/vagrant_data"
+  config.vm.provision "shell", inline: <<-SHELL
+      sudo apt update && sudo apt upgrade -y
+      sudo apt install -y cgroup-tools debootstrap
+  SHELL
+end
+```
+
+Create VM
+```sh
+vagrant up
+```
+
+Sync scripts
+```sh
+vagrant ssh -c "sudo cp -r /vagrant_data/* /home/vagrant"
+```
+
+ssh into VM
+```sh
+vagrant ssh
 ```
