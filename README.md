@@ -31,10 +31,10 @@ sudo apt install -y cgroup-tools debootstrap
 
 To create the container
 ```sh
-./create.sh
+sudo ./create.sh
 ```
 
 To delete the container
 ```sh
-./delete.sh
+sudo ./delete.sh
 ```
