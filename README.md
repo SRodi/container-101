@@ -18,13 +18,13 @@ This script essentially sets up a basic containerized environment with network i
 ## Prerequisites
 
 1. Linux machine
-2. cgroup-tools and debootstrap
+2. `libcgroup-dev` and `debootstrap`
 
 Install the following
 
 ```sh
 sudo apt update && sudo apt upgrade -y
-sudo apt install -y cgroup-tools debootstrap
+sudo apt install -y libcgroup-dev debootstrap
 ```
 
 ## Quickstart

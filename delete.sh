@@ -3,8 +3,9 @@ set -e
 
 C_NAME=mycontainer
 
-# Clean up cgroups
-cgdelete -g memory,cpu:$C_NAME
+# Clean up cgroups v2
+CGROUP_DIR=/sys/fs/cgroup/$C_NAME
+rmdir $CGROUP_DIR
 
 # Clean up network namespaces
 ip netns delete "${C_NAME}_ns"

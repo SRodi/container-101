@@ -12,13 +12,14 @@ tar -xzf /mnt/$C_NAME/$FS_VERSION -C /mnt/$C_NAME
 # Create proc directory and mount proc filesystem
 mkdir -p /mnt/$C_NAME/proc
 
-# Set up cgroups
-mkdir -p /sys/fs/cgroup/$C_NAME
-cgcreate -a $(whoami) -g memory,cpu:$C_NAME
+# Set up cgroups v2
+CGROUP_DIR=/sys/fs/cgroup/$C_NAME
+mkdir -p $CGROUP_DIR
+echo "+memory +cpu" > $CGROUP_DIR/cgroup.subtree_control
 # Set memory limit to 1KB
-cgset -r memory.max=1024 $C_NAME
-# Set CPU limit to 0.1 CPU core
-cgset -r cpu.max=10000 $C_NAME
+echo 1024 > $CGROUP_DIR/memory.max
+# Set CPU limit to 10ms per 100ms (10% of a CPU)
+echo 10000 > $CGROUP_DIR/cpu.max
 
 # Set up network namespace
 ip netns add "${C_NAME}_ns"
